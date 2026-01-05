@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Symptom Checker | KHealth</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root{
+--bg:#f4f6fa;
+--text:#111;
+--card:rgba(255,255,255,.65);
+--accent:#2f80ed;
+--danger:#ff4d4d;
+--warn:#ffb703;
+--safe:#4caf50;
+}
+
+body.dark{
+--bg:#0e1117;
+--text:#fff;
+--card:rgba(255,255,255,.08);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.4s;
+}
+
+a,a:hover,a:visited,a:active{
+text-decoration:none;
+color:inherit;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 40px;
+}
+
+.logo{
+font-size:1.6rem;
+font-weight:800;
+}
+
+.logo span{color:var(--accent)}
+
+header button{
+border:none;
+background:var(--accent);
+color:#fff;
+padding:10px 18px;
+border-radius:20px;
+cursor:pointer;
+}
+
+main{
+padding:40px;
+max-width:1100px;
+margin:auto;
+}
+
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:linear-gradient(135deg,#c9d6ff,#e2e2e2);
+padding:50px;
+border-radius:30px;
+margin-bottom:40px;
+}
+
+.hero h2{
+font-size:3rem;
+}
+
+.hero p{
+margin-top:15px;
+opacity:.8;
+}
+
+.hero img{
+width:300px;
+border-radius:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.25);
+animation:float 5s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-16px)}
+100%{transform:translateY(0)}
+}
+
+.checker{
+background:var(--card);
+backdrop-filter:blur(20px);
+padding:35px;
+border-radius:25px;
+box-shadow:0 15px 40px rgba(0,0,0,.1);
+}
+
+.checker h3{
+margin-bottom:10px;
+}
+
+.checker input{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid #ccc;
+margin:15px 0;
+}
+
+.checker button{
+padding:14px 22px;
+border:none;
+border-radius:20px;
+background:var(--accent);
+color:#fff;
+cursor:pointer;
+}
+
+.results{
+margin-top:25px;
+display:none;
+animation:fade .5s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.result-card{
+background:var(--card);
+padding:20px;
+border-radius:20px;
+margin-top:15px;
+}
+
+.badge{
+display:inline-block;
+padding:6px 14px;
+border-radius:20px;
+font-size:.8rem;
+color:#fff;
+margin-bottom:10px;
+}
+
+.low{background:var(--safe)}
+.medium{background:var(--warn)}
+.high{background:var(--danger)}
+
+ul{
+margin-top:10px;
+padding-left:20px;
+}
+
+ul li{
+margin:6px 0;
+}
+
+.recommend{
+margin-top:15px;
+font-weight:600;
+}
+
+@media(max-width:768px){
+.hero{
+flex-direction:column;
+text-align:center;
+gap:25px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a href="index.html" class="logo">PRO<span>Health</span></a>
+<button id="mode">🌙</button>
+</header>
+
+<main>
+
+<section class="hero">
+<div>
+<h2>Symptom Checker</h2>
+<p>Get instant insights & possible diagnoses based on your symptoms</p>
+</div>
+<img src="https://images.pexels.com/photos/8460157/pexels-photo-8460157.jpeg">
+</section>
+
+<section class="checker">
+<h3>Enter Your Symptoms</h3>
+<p>Separate symptoms using commas</p>
+<input id="symptoms" placeholder="fever, cough, headache">
+<button onclick="analyze()">Analyze Symptoms</button>
+
+<div class="results" id="results">
+<div class="result-card">
+<span class="badge" id="severity"></span>
+<h4>Possible Conditions</h4>
+<ul id="conditions"></ul>
+<div class="recommend" id="advice"></div>
+</div>
+</div>
+</section>
+
+</main>
+
+<script>
+document.getElementById("mode").onclick=()=>document.body.classList.toggle("dark")
+
+function analyze(){
+const input=document.getElementById("symptoms").value.toLowerCase()
+const results=document.getElementById("results")
+const conditions=document.getElementById("conditions")
+const severity=document.getElementById("severity")
+const advice=document.getElementById("advice")
+
+conditions.innerHTML=""
+let level="low"
+let list=[]
+let text=""
+
+if(input.includes("fever")&&input.includes("cough")){
+level="medium"
+list.push("Seasonal Flu","Viral Infection")
+text="Rest, hydrate well, consult a physician if symptoms persist."
+}
+
+if(input.includes("chest pain")||input.includes("shortness of breath")){
+level="high"
+list=["Possible Cardiac Issue","Respiratory Emergency"]
+text="Seek immediate medical attention."
+}
+
+if(input.includes("headache")&&input.includes("nausea")){
+level="medium"
+list.push("Migraine","Dehydration")
+text="Reduce screen time, hydrate, and rest."
+}
+
+if(list.length===0){
+list.push("General Discomfort")
+text="Monitor symptoms and consult a doctor if needed."
+}
+
+severity.className="badge "+level
+severity.innerText=level.toUpperCase()+" RISK"
+
+list.forEach(item=>{
+const li=document.createElement("li")
+li.innerText=item
+conditions.appendChild(li)
+})
+
+advice.innerText=text
+results.style.display="block"
+}
+</script>
+
+</body>
+</html>

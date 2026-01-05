@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visit Us | KHealth</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root{
+--bg:#f4f6fa;
+--text:#111;
+--card:rgba(255,255,255,0.65);
+--accent:#2f80ed;
+}
+
+body.dark{
+--bg:#0e1117;
+--text:#fff;
+--card:rgba(255,255,255,0.08);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.4s;
+}
+
+a,a:visited,a:hover,a:active{
+text-decoration:none;
+color:inherit;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 40px;
+}
+
+.logo{
+font-size:1.6rem;
+font-weight:800;
+}
+
+.logo span{color:var(--accent)}
+
+header button{
+border:none;
+background:var(--accent);
+color:#fff;
+padding:10px 18px;
+border-radius:20px;
+cursor:pointer;
+}
+
+main{
+padding:40px;
+}
+
+.hero{
+background:linear-gradient(135deg,#c9d6ff,#e2e2e2);
+border-radius:30px;
+padding:50px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+overflow:hidden;
+}
+
+.hero h2{
+font-size:3rem;
+}
+
+.hero p{
+margin-top:15px;
+opacity:.8;
+}
+
+.hero img{
+width:300px;
+border-radius:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.25);
+animation:float 5s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-18px)}
+100%{transform:translateY(0)}
+}
+
+.locations{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.location-card{
+background:var(--card);
+backdrop-filter:blur(20px);
+padding:25px;
+border-radius:25px;
+box-shadow:0 15px 40px rgba(0,0,0,.1);
+transition:.4s;
+cursor:pointer;
+}
+
+.location-card:hover{
+transform:translateY(-12px) scale(1.03);
+}
+
+.location-card h3{
+margin-bottom:6px;
+}
+
+.location-card span{
+font-size:.9rem;
+opacity:.7;
+}
+
+.location-card button{
+margin-top:15px;
+padding:10px 18px;
+border:none;
+border-radius:20px;
+background:var(--accent);
+color:#fff;
+cursor:pointer;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:10;
+}
+
+.modal-box{
+background:var(--bg);
+padding:35px;
+border-radius:25px;
+width:320px;
+animation:pop .4s ease;
+}
+
+@keyframes pop{
+from{transform:scale(.8);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.modal-box h3{
+margin-bottom:15px;
+}
+
+.modal-box input,select{
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:12px;
+border:1px solid #ccc;
+}
+
+.modal-box button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:18px;
+background:var(--accent);
+color:#fff;
+margin-top:10px;
+cursor:pointer;
+}
+
+.close{
+background:#000;
+}
+
+.success{
+margin-top:15px;
+font-size:.9rem;
+color:green;
+text-align:center;
+display:none;
+}
+
+@media(max-width:768px){
+.hero{
+flex-direction:column;
+text-align:center;
+gap:25px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a href="index.html" class="logo">PRO<span>Health</span></a>
+<button id="mode">🌙</button>
+</header>
+
+<main>
+
+<section class="hero">
+<div>
+<h2>Visit Our Hospitals</h2>
+<p>Book appointments at our trusted locations near you</p>
+</div>
+<img src="https://images.pexels.com/photos/8460157/pexels-photo-8460157.jpeg">
+</section>
+
+<section class="locations">
+<div class="location-card" onclick="openModal('Delhi Central Hospital')">
+<h3>Delhi Central Hospital</h3>
+<span>Connaught Place, Delhi</span>
+<button>Book Appointment</button>
+</div>
+
+<div class="location-card" onclick="openModal('Mumbai Care Clinic')">
+<h3>Mumbai Care Clinic</h3>
+<span>Andheri West, Mumbai</span>
+<button>Book Appointment</button>
+</div>
+
+<div class="location-card" onclick="openModal('Bangalore Health Hub')">
+<h3>Bangalore Health Hub</h3>
+<span>Whitefield, Bangalore</span>
+<button>Book Appointment</button>
+</div>
+
+<div class="location-card" onclick="openModal('Chennai Medical Center')">
+<h3>Chennai Medical Center</h3>
+<span>Anna Nagar, Chennai</span>
+<button>Book Appointment</button>
+</div>
+
+<div class="location-card" onclick="openModal('Hyderabad Care Hospital')">
+<h3>Hyderabad Care Hospital</h3>
+<span>Banjara Hills, Hyderabad</span>
+<button>Book Appointment</button>
+</div>
+</section>
+
+</main>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+<h3 id="hospital"></h3>
+<input placeholder="Full Name">
+<select>
+<option>Select Doctor</option>
+<option>General Physician</option>
+<option>Pediatrician</option>
+<option>Cardiologist</option>
+<option>Dermatologist</option>
+</select>
+<input type="date">
+<input type="time">
+<button onclick="confirmBooking()">Confirm Appointment</button>
+<button class="close" onclick="closeModal()">Close</button>
+<div class="success" id="success">Appointment Booked Successfully</div>
+</div>
+</div>
+
+<script>
+const modal=document.getElementById("modal")
+const hospital=document.getElementById("hospital")
+const success=document.getElementById("success")
+document.getElementById("mode").onclick=()=>document.body.classList.toggle("dark")
+
+function openModal(name){
+hospital.innerText=name
+success.style.display="none"
+modal.style.display="flex"
+}
+
+function closeModal(){
+modal.style.display="none"
+}
+
+function confirmBooking(){
+success.style.display="block"
+setTimeout(()=>modal.style.display="none",1500)
+}
+</script>
+
+</body>
+</html>
